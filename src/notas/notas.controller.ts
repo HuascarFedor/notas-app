@@ -1,7 +1,17 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { NotasService } from './notas.service';
 import { CreateNotaDto } from './dto/create-nota.dto';
 import { Nota } from './nota.entity';
+import { UpdateNotaDto } from './dto/update-nota.dto';
 
 @Controller('notas')
 export class NotasController {
@@ -25,5 +35,18 @@ export class NotasController {
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Nota> {
     return this.notasService.findOne(+id);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateNotaDto: UpdateNotaDto,
+  ): Promise<Nota> {
+    return this.notasService.update(+id, updateNotaDto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string): Promise<void> {
+    return this.notasService.remove(+id);
   }
 }
