@@ -3,6 +3,8 @@ import { NotasModule } from './notas/notas.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Nota } from './notas/nota.entity';
 import { UsersModule } from './users/users.module';
+import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,11 +15,12 @@ import { UsersModule } from './users/users.module';
       username: 'root',
       password: '',
       database: 'notas_db',
-      entities: [Nota],
+      entities: [Nota, User],
       synchronize: true,
     }),
     NotasModule,
     UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
