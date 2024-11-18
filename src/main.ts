@@ -13,13 +13,13 @@ async function bootstrap() {
     .setTitle('API de Notas')
     .setDescription('Documentación de la API para el controlador de notas')
     .setVersion('1.0')
-    .addTag('notas')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
   //Montar Swagger usando swagger-ui-express
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(document));
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();

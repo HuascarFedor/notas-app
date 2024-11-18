@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -14,13 +15,17 @@ import {
   ApiBody,
   ApiParam,
   ApiQuery,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { NotasService } from './notas.service';
 import { CreateNotaDto } from './dto/create-nota.dto';
 import { Nota } from './nota.entity';
 import { UpdateNotaDto } from './dto/update-nota.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 
-@ApiTags('notas')
+@ApiTags('Notas')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('notas')
 export class NotasController {
   constructor(private readonly notasService: NotasService) {}

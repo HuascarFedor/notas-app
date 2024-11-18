@@ -1,6 +1,11 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -12,17 +17,17 @@ export class UsersService {
   ) {}
 
   async createUser(user: CreateUserDto): Promise<User> {
-    // Primero, revisar si el nombre de usuario ya existe
+    //Primero, revisar si el nombre de usuario ya existe
     const userFound = await this.userRepository.findOne({
       where: {
         username: user.username,
       },
     });
-    // Segundo, emitir la excepción correspondiente si el usuario ya existe
+    //Segundo, emitir la excepcion correspondiente si el usuario ya existe
     if (userFound) {
-      throw new HttpException('El usuario ya existe', HttpStatus.CONFLICT);
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
-    // Tercero, En caso de no existir registramos el usuario
+    //Tercero, en caso de superar el control se registra el usuario
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const createUser = this.userRepository.create({
       username: user.username,
@@ -31,16 +36,17 @@ export class UsersService {
     return this.userRepository.save(createUser);
   }
 
+  async getUsers(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
   async getUser(username: string): Promise<User> {
-    // Primero, revisar si el nombre de usuario ya existe
-    const userFound = await this.userRepository.findOne({
-      where: {
-        username: username,
-      },
+    const user = await this.userRepository.findOne({
+      where: { username },
     });
-    if (!userFound) {
-      throw new NotFoundException('El usuario no existe');
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
-    return userFound;
+    return user;
   }
 }

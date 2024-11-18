@@ -3,8 +3,9 @@ import { NotasModule } from './notas/notas.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Nota } from './notas/nota.entity';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { User } from './users/user.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
       entities: [Nota, User],
       synchronize: true,
     }),
+    ConfigModule.forRoot({ isGlobal: true }),
     NotasModule,
     UsersModule,
     AuthModule,

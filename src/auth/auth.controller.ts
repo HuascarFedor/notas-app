@@ -9,10 +9,13 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  @ApiOperation({ summary: 'Iniciar sesión ' })
+  @ApiOperation({ summary: 'Iniciar sesión' })
   @ApiBody({ type: LoginDto })
-  async login(@Body() datos: LoginDto) {
-    const user = await this.authService.validateUser(datos.username);
+  async login(@Body() loginDto: LoginDto) {
+    const user = await this.authService.validateUser(
+      loginDto.username,
+      loginDto.password,
+    );
     if (!user) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
